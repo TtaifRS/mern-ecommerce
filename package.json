@@ -1,0 +1,22 @@
+{
+  "name": "mern-ecommerce",
+  "version": "1.0.0",
+  "description": "",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/TtaifRS/mern-ecommerce.git"
+  },
+  "author": "Taif Rahaman",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/TtaifRS/mern-ecommerce/issues"
+  },
+  "homepage": "https://github.com/TtaifRS/mern-ecommerce#readme",
+  "dependencies": {
+    "express": "^4.17.1"
+  }
+}
