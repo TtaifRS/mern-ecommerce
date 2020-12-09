@@ -1,11 +1,11 @@
 import React, { useEffect } from 'react';
 import { Col, Row } from 'react-bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
-import Loader from 'react-loader-spinner';
-import 'react-loader-spinner/dist/loader/css/react-spinner-loader.css';
 
 import Product from '../components/Product';
-import { listProducts } from '../redux/actions/productListActions';
+import { listProducts } from '../redux/actions/productActions';
+import Loading from '../components/Loading';
+import ErrorMessage from '../components/ErrorMessage';
 
 const HomePage = () => {
   const dispatch = useDispatch();
@@ -22,20 +22,9 @@ const HomePage = () => {
     <>
       <h1>Latest Products</h1>
       {loading ? (
-        <Loader
-          type="ThreeDots"
-          color="#00000094"
-          height={100}
-          width={100}
-          timeout={3000} //3 secs
-          style={{
-            display: 'flex',
-            justifyContent: 'center',
-            alignItems: 'center',
-          }}
-        />
+        <Loading />
       ) : error ? (
-        <h5>{error}</h5>
+        <ErrorMessage variant="danger">{error}</ErrorMessage>
       ) : (
         <Row>
           {products.map((product) => (
