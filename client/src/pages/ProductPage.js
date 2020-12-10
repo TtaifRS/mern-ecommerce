@@ -1,6 +1,15 @@
-import React, { useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { Button, Col, Container, Image, ListGroup, Row } from 'react-bootstrap';
+import {
+  Button,
+  Col,
+  Container,
+  Form,
+  Image,
+  ListGroup,
+  Row,
+  Card,
+} from 'react-bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
 
 import Rating from '../components/Rating';
@@ -8,7 +17,9 @@ import { detailsProducts } from '../redux/actions/productActions';
 import Loading from '../components/Loading';
 import ErrorMessage from '../components/ErrorMessage';
 
-const ProductPage = ({ match }) => {
+const ProductPage = ({ match, history }) => {
+  const [qty, setQty] = useState(1);
+
   const dispatch = useDispatch();
 
   const productDetails = useSelector((state) => state.productDetails);
@@ -17,6 +28,11 @@ const ProductPage = ({ match }) => {
   useEffect(() => {
     dispatch(detailsProducts(match.params.id));
   }, [dispatch, match]);
+
+  const addCartHandler = () => {
+    history.push(`/cart/${match.params.id}?qty=${qty}`);
+  };
+
   return (
     <>
       <Container>
@@ -26,7 +42,7 @@ const ProductPage = ({ match }) => {
           <ErrorMessage variant="danger">{error}</ErrorMessage>
         ) : (
           <Row>
-            <Col md={6}>
+            <Col md={5}>
               <Image src={product.image} alt={product.name} fluid />
             </Col>
             <Col md={4}>
@@ -47,26 +63,62 @@ const ProductPage = ({ match }) => {
               <ListGroup.Item style={{ border: 'none' }}>
                 {product.description}
               </ListGroup.Item>
-              <ListGroup.Item
-                className={
-                  product.countInStock > 0 ? 'text-success' : 'text-danger'
-                }
-                style={{ border: 'none' }}
-              >
-                <strong>
-                  {product.countInStock > 0 ? 'In Stock' : 'Out of Stock'}
-                </strong>
-              </ListGroup.Item>
-              <ListGroup.Item style={{ border: 'none' }}>
-                <Button
-                  className="btn-block"
-                  variant="outline-info"
-                  disabled={product.countInStock === 0}
-                  style={{ borderRadius: '50px' }}
-                >
-                  Add to Cart
-                </Button>
-              </ListGroup.Item>
+            </Col>
+            <Col md={3}>
+              <Card>
+                <ListGroup variant="flush">
+                  <ListGroup.Item>
+                    <Row>
+                      <Col>Price:</Col>
+                      <Col>
+                        <strong>{product.price}</strong>
+                      </Col>
+                    </Row>
+                  </ListGroup.Item>
+                  <ListGroup.Item
+                    className={
+                      product.countInStock > 0 ? 'text-success' : 'text-danger'
+                    }
+                  >
+                    <strong>
+                      {product.countInStock > 0 ? 'In Stock' : 'Out of Stock'}
+                    </strong>
+                  </ListGroup.Item>
+                  {product.countInStock > 0 && (
+                    <ListGroup.Item>
+                      <Row>
+                        <Col>Quantity</Col>
+                        <Col>
+                          <Form.Control
+                            as="select"
+                            value={qty}
+                            onChange={(e) => setQty(e.target.value)}
+                          >
+                            {[...Array(product.countInStock).keys()].map(
+                              (x) => (
+                                <option key={x + 1} value={x + 1}>
+                                  {x + 1}
+                                </option>
+                              )
+                            )}
+                          </Form.Control>
+                        </Col>
+                      </Row>
+                    </ListGroup.Item>
+                  )}
+                  <ListGroup.Item style={{ border: 'none' }}>
+                    <Button
+                      className="btn-block"
+                      variant="outline-info"
+                      disabled={product.countInStock === 0}
+                      style={{ borderRadius: '50px' }}
+                      onClick={addCartHandler}
+                    >
+                      Add to Cart
+                    </Button>
+                  </ListGroup.Item>
+                </ListGroup>
+              </Card>
             </Col>
           </Row>
         )}
