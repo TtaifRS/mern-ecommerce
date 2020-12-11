@@ -2,6 +2,7 @@ import {
   USER_LOGIN_FAIL,
   USER_LOGIN_REQ,
   USER_LOGIN_SUCCESS,
+  USER_LOGOUT,
 } from '../types/userTypes';
 import axios from 'axios';
 
@@ -17,7 +18,7 @@ export const login = (email, password) => async (dispatch) => {
       },
     };
 
-    const { data } = axios.post(
+    const { data } = await axios.post(
       '/api/users/login',
       { email, password },
       config
@@ -38,4 +39,11 @@ export const login = (email, password) => async (dispatch) => {
           : error.message,
     });
   }
+};
+
+export const logout = () => async (dispatch) => {
+  dispatch({
+    type: USER_LOGOUT,
+  });
+  localStorage.removeItem('userInfo');
 };

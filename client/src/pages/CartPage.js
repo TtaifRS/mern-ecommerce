@@ -23,8 +23,6 @@ const CartPage = ({ match, location, history }) => {
   const cart = useSelector((state) => state.cart);
   const { cartItems } = cart;
 
-  console.log(cartItems);
-
   useEffect(() => {
     if (productId) {
       dispatch(addToCart(productId, qty));
@@ -46,7 +44,7 @@ const CartPage = ({ match, location, history }) => {
         {cartItems.length === 0 ? (
           <ErrorMessage variant="info">
             Your Cart is empty,{' '}
-            <Link>
+            <Link to="/">
               <strong>Go Back</strong>
             </Link>
           </ErrorMessage>
